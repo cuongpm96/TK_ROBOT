@@ -44,25 +44,10 @@ end
 % end
 figure(1)
 plot(t,u(1,:))
-title('momen khop 1')
 figure(2)
 plot(t,u(2,:))
-title('momen khop 2')
 figure(3)
-plot(t,u(3,:))
-title('momen khop 3')
-
-figure(4)
-plot(t,dq(1,:))
-title('van toc khop 1')
-figure(5)
-plot(t,dq(2,:))
-title('van toc khop 2')
-figure(6)
-plot(t,dq(3,:))
-title('van toc khop 3')
-
-
+plot(t,u(2,:))
 
 
 

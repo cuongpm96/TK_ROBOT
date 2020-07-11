@@ -1,10 +1,10 @@
-function [E,vE,aE] = quydao(A,B,type)
+function [E,vE,aE] = quydao(A,B,ti,tf,type)
     syms t;
     if type == 0 
         L = norm(A-B);
         %cac thong so cua quy dao bac 3
-        ti = 0;
-        tf = 3;
+%         ti = 0;
+%         tf = 3;
         qi = 0;
         qf = L;
         dqi = 0;
@@ -15,45 +15,56 @@ function [E,vE,aE] = quydao(A,B,type)
         a2 = (3*(qf-qi)-(2*dqi+dqf)*(tf-ti))/(tf-ti)^2;
         a3 = (2*(qi-qf)+(dqf+dqi)*(tf-ti))/(tf-ti)^3;
         %phuong trinh quy dao bac 3
-        st = a3*t.^3 + a2*t.^2 + a1*t + a0;
-        dst = 3*a3*t.^2 + 2*a2*t + a1;
-        ddst = 6*a3*t + 2*a2;
+        st = a3*(t-ti).^3 + a2*(t-ti).^2 + a1*(t-ti) + a0;
+        dst = 3*a3*(t-ti).^2 + 2*a2*(t-ti) + a1;
+        ddst = 6*a3*(t-ti) + 2*a2;
         %cac diem tren quy dao
-        t1 = 0:0.1:3;
+        t1 = ti:0.1:tf;
         E = A + (B-A)/qf*st;
         vE = (B-A)/qf*dst;
         aE = (B-A)/qf*ddst;
         E = subs(E,t,t1);
         vE = subs(vE,t,t1);
         aE = subs(aE,t,t1);
+%         st = subs(st,t,t1);
+%         plot(t1,st)
     else
         L = norm(A-B);
         %các thông so cua quy dao
         vmax = 0.16; % don vi mm/s
         ta = 0.5; 
-        ti = 0;
-        tf = 3;
+%         ti = 6;
+%         tf = 9;
         qi = 0;
         qf = L; % don vi mm
         
-        t1 = 0:0.1:0.5;
-        t2 = 0.6:0.1:2.4;
-        t3 = 2.5:0.1:3;
+        t1 = ti:0.1:ti+ta;
+        t2 = ti+ta+0.1:0.1:tf-0.6;
+        t3 = tf-ta:0.1:tf;
         %phuong trinh quy dao 
         q1 = qi + (vmax/(2*ta))*((t-ti)^2);
         q2 = qi + vmax*(t-ti-ta/2);
         q3 = qf - (vmax/(2*ta))*(tf-t)^2;
         %phuong trinnh van toc
-        dq1 = (vmax/ta)*t;
+        dq1 = (vmax/ta)*(t-ti);
         dq2 = vmax;
         dq3 = vmax*tf/ta - (vmax/ta)*t;
+        %phuong trinh gia toc
         ddq1 = vmax/ta;
         ddq2 = 0;
         ddq3 = -(vmax/ta);
+        %ve quy dao di chuyen va van toc
+%         q1 = subs(q1,t1);
+%         q2 = subs(q2,t2);
+%         q3 = subs(q3,t3);
+%         q = [q1 q2 q3];
+%         figure(1)
+%         plot([t1 t2 t3],q)
 %         dq1 = subs(dq1,t1);
 %         dq2 = subs(dq2,t2);
 %         dq3 = subs(dq3,t3);
 %         dq = [dq1 dq2 dq3];
+%         figure(2)
 %         plot([t1 t2 t3],dq)
         %diem tren doan tang toc
         E1 = A + (B-A)/qf*q1;
